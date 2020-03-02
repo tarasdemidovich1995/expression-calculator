@@ -62,16 +62,12 @@ function expressionCalculator(exp) {
     exp = infixToPostfix(transInArr(exp));
     if (exp.includes('(') || exp.includes(')')) throw new Error('ExpressionError: Brackets must be paired');
     while (exp.length > 1) {
-        for (let i = 0; i < exp.length; i++) {
-            if ('*/-+'.includes(exp[i])) {
-                const op = exp[i];
-                const a = exp[i - 2];
-                const b = exp[i - 1];
-                const result = ops[op](a, b);
-                exp.splice(i - 2, 3, result);
-                break;
-            }
-        }
+        const opIndex = exp.findIndex((elem) => elem == '*' || elem == '/' || elem == '+' || elem == '-');
+        const op = exp[opIndex];
+        const a = exp[opIndex - 2];
+        const b = exp[opIndex - 1];
+        const result = ops[op](a, b);
+        exp.splice(opIndex - 2, 3, result);
     }
     return exp[0];
 }
